@@ -1,0 +1,28 @@
+version: "2"
+sql:
+  - schema: "migrations"
+    queries: "queries"
+    engine: postgresql
+    gen:
+      go:
+        package: "dbo"
+        sql_package: "pgx/v5"
+        out: "."
+        emit_empty_slices: true
+        emit_json_tags: true
+        emit_pointers_for_null_types: true
+        #emit_all_enum_values: true
+overrides:
+  go:
+    rename:
+      ip: IP
+      url: URL
+    overrides:
+      - db_type: "pg_catalog.int4"
+        go_type: int
+      - db_type: "pg_catalog.int8"
+        go_type: int64
+        #nullable: true
+
+      - db_type: "timestamptz"
+        go_type: time.Time

@@ -1,0 +1,28 @@
+services:
+  mirror:
+    restart: unless-stopped
+    build:
+      context: ../
+      dockerfile: dev/Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+    ports:
+      - 5432:5432
+
+  nginx:
+    image: nginx
+    restart: unless-stopped
+    depends_on:
+      - mirror
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8081:8081

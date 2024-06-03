@@ -1,0 +1,55 @@
+{{define "main"}}
+    <h1>
+        {{.Method}} {{.Path}}
+    </h1>
+    <p>
+        <a href="/requests/endpoint/{{.Domain | urlpath}}/{{.Method | urlpath}}/{{.Path | urlpath}}/">
+            Search similar requests for {{.Domain}}
+        </a>
+    </p>
+    <p>
+        <code>{{.URL}}</code>
+    </p>
+    Request <code>{{.RequestID}}</code> was made at
+    <time datetime="{{.CreatedAt | isoDateTime}}">{{.CreatedAt | prettyDateTime}}</time>.
+    <h2>Headers</h2>
+    {{template "headersTable" .Headers}}
+    <h2>Payload</h2>
+    {{if .PartialContent }}
+        <p>
+            <mark>Partial content!</mark>
+            Only part of payload was consumed
+        </p>
+    {{end}}
+    {{template "content" .Content}}
+    <a href="content" download="{{.ID}}{{with .RequestID}}-{{.}}{{end}}">Download</a>
+{{end}}
+{{ define "content"}}
+    {{if isValidString .}}
+        <pre>{{. | toString}}</pre>
+    {{- else}}
+        <b>Content is not text</b>
+        <pre>{{. | b64enc | wrap 80}}</pre>
+    {{end}}
+
+{{ end}}
+{{ define "headersTable"}}
+    <table>
+        <thead>
+        <tr>
+            <th>Header</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{- range $key, $values := (. | toString | fromJson)}}
+            {{- range $values}}
+                <tr>
+                    <th>{{$key}}</th>
+                    <td>{{.}}</td>
+                </tr>
+            {{- end}}
+        {{- end}}
+        </tbody>
+    </table>
+{{end}}

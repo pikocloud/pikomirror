@@ -1,0 +1,6 @@
+/test
+/build
+.idea
+.vscode
+.DS_Store
+/pikomirror

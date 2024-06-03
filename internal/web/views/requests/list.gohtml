@@ -1,0 +1,61 @@
+{{define "main"}}
+    <h1>Requests</h1>
+    <p>Sorted from newest to oldest</p>
+    {{with .Term}}
+        <p>{{.}}</p>
+    {{end}}
+    <table>
+        <thead>
+        <tr>
+            <th>Time</th>
+            <th>Domain</th>
+            <th>Method</th>
+            <th>Path</th>
+            <th>Request ID</th>
+            <th>IP</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{- range .Records}}
+            <tr>
+                <td>
+                    <a href="/requests/id/{{.ID}}/">
+                        <time>{{.CreatedAt | prettyDateTime}}</time>
+                    </a>
+                </td>
+                <td>
+                    {{.Domain}}
+                </td>
+                <td>
+                    <a href="/requests/endpoint/{{.Domain | urlpath}}/{{.Method | urlpath}}/{{.Path | urlpath}}/">{{.Method}}</a>
+                </td>
+                <td>
+                    <a href="/requests/endpoint/{{.Domain | urlpath}}/{{.Method | urlpath}}/{{.Path | urlpath}}/">{{.Path}}</a>
+                </td>
+                <td>{{.RequestID}}</td>
+                <td>{{.IP}}</td>
+            </tr>
+        {{- end}}
+        </tbody>
+
+    </table>
+    <div style="display: flex; justify-content: space-between; align-items: center">
+        <span>
+            {{if gt .Page 1}}
+                <a href="?page={{add .Page -1}}">← Prev</a>
+            {{else}}
+                &nbsp;
+            {{end}}
+        </span>
+        <span>{{.Page}}</span>
+        <span>
+            {{if ge (len .Records) .PageSize }}
+                <a href="?page={{add .Page 1}}">Next →</a>
+            {{else}}
+                &nbsp;
+            {{end}}
+        </span>
+    </div>
+
+
+{{end}}
