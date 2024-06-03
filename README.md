@@ -1,5 +1,7 @@
 # PikoMirror
 
+![](_docs/mirror.png)
+
 High-performance storage for traffic for [http_mirror](https://nginx.org/en/docs/http/ngx_http_mirror_module.html).
 
 Easy, hackable, and ships with web UI.
